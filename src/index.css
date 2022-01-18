@@ -11,4 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.carrito{
+  height: 30px;
+  width: 30px;
+  padding-bottom: 4px;
+}
+
+.producto{
+  text-align: center;
+  border: 2px solid green;
+  width: 20%;
+  margin: 1px auto 1px auto;
+}
 
