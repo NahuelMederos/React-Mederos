@@ -24,3 +24,12 @@ code {
   margin: 1px auto 1px auto;
 }
 
+.numero-contador{
+  min-width: 50px;
+}
+
+h3{
+  text-align: center;
+}
+
+
