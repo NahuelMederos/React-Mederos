@@ -1,20 +1,13 @@
-import React from 'react'
-import ItemCount from './ItemCount'
+import React from "react";
+import ItemCount from "./ItemCount";
+import ItemList from "./ItemList";
 
 function ItemListContainer(props) {
-    return (
-        <>
-        <div className='producto'>
-            <p>Producto: {props.nombre}</p>
-            <p>Precio: {props.precio}</p>
-            <p>Descripcion: {props.descripcion}</p>
-        </div>
-        <ItemCount
-        stock={props.stock}
-        initial={props.initial}
-        nombre={props.nombre}/>
-        </>
-    )
+  return (
+    <>
+      <ItemList />
+    </>
+  );
 }
 
-export default ItemListContainer
+export default ItemListContainer;
