@@ -40,7 +40,19 @@ h3 {
   text-align: center;
 }
 
+.item-detail {
+  width: 100%;
+  display: inline-block;
+  margin: 1px 1% 1px 1%;
+  text-align: center;
+}
+
 .item-img {
   width: 200px;
   height: 200px;
+}
+.item-img-detail {
+  width: 400px;
+  height: 400px;
+  float: right;
 }

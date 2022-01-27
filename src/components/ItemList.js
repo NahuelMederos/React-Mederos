@@ -1,44 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Item from "./Item";
 
-const ITEMS = [
-  {
-    id: 0,
-    title: "Camiseta",
-    price: 1500,
-    pictureUrl: "images/camiseta.jpg",
-  },
-  {
-    id: 1,
-    title: "Almohada",
-    price: 200,
-    pictureUrl: "images/almohada.jpg",
-  },
-  {
-    id: 2,
-    title: "Termo",
-    price: 1500,
-    pictureUrl: "images/termo.jpg",
-  },
-];
-
 function ItemList() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const getItems = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(ITEMS), 2000);
-    });
-  };
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const URL = "http://localhost:3001/productos";
+
     setIsLoading(true);
-    getItems()
-      .then((data) => setItems(data))
-      .catch((error) => {
-        console.log(error);
-      })
+    fetch(URL)
+      .then((response) => response.json())
+      .then((json) => setItems(json))
+      .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -49,6 +24,8 @@ function ItemList() {
           className="spinner-grow position-absolute top-50 start-50 "
           role="status"
         ></div>
+      ) : error ? (
+        "Hubo un error " + error
       ) : (
         items.map((item) => (
           <Item
@@ -56,6 +33,7 @@ function ItemList() {
             title={item.title}
             price={item.price}
             pictureUrl={item.pictureUrl}
+            stock={item.stock}
           />
         ))
       )}

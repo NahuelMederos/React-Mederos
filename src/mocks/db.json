@@ -1,0 +1,28 @@
+{
+    "productos": [
+        {
+            "id": 0,
+            "title": "Camiseta",
+            "price": 1500,
+            "details": "Camiseta roja fachera",
+            "pictureUrl": "images/camiseta.jpg",
+            "stock": 10
+        },
+        {
+            "id": 1,
+            "title": "Almohada",
+            "price": 200,
+            "details": "Almohada muy comoda",
+            "pictureUrl": "images/almohada.jpg",
+            "stock": 5
+        },
+        {
+            "id": 2,
+            "title": "Termo",
+            "price": 1500,
+            "details": "Termo de metal verde",
+            "pictureUrl": "images/termo.jpg",
+            "stock": 9
+        }
+    ]
+}
