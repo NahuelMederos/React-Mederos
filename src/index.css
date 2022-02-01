@@ -33,11 +33,9 @@ h3 {
 }
 
 .item {
-  border: 1px solid blue;
-  width: 300px;
-  display: inline-block;
-  margin: 1px 1% 1px 1%;
+  margin: 20px 1% 1px 1%;
   text-align: center;
+  width: 200px;
 }
 
 .item-detail {
@@ -51,8 +49,14 @@ h3 {
   width: 200px;
   height: 200px;
 }
+
 .item-img-detail {
   width: 400px;
   height: 400px;
   float: right;
+  margin-right: 100px;
+}
+
+a {
+  text-decoration: none !important;
 }
