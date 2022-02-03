@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ItemCount from "./ItemCount";
 import { Row, Col } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function ItemDetail() {
   const { id } = useParams();
+  let navigate = useNavigate();
 
   const [item, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [contador, setContador] = useState(1);
+  const [itemsComprados, setItemsComprados] = useState();
 
   useEffect(() => {
     const URL = `http://localhost:3001/productos/${id}`;
@@ -20,6 +23,23 @@ function ItemDetail() {
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
   }, [id]);
+
+  const decrement = () => {
+    contador <= 1
+      ? setContador((prevState) => prevState)
+      : setContador((prevState) => prevState - 1);
+  };
+
+  const increment = () => {
+    contador >= item.stock
+      ? setContador((prevState) => prevState)
+      : setContador((prevState) => prevState + 1);
+  };
+
+  const onAdd = () => {
+    setItemsComprados(contador);
+    navigate("/cart");
+  };
 
   return (
     <div>
@@ -44,7 +64,16 @@ function ItemDetail() {
             <p>Precio : {item.price}</p>
             <p>Detalles: {item.details}</p>
           </Col>
-          <ItemCount nombre={item.title} stock={item.stock} initial={1} />
+          {
+            <ItemCount
+              nombre={item.title}
+              stock={item.stock}
+              decrement={decrement}
+              increment={increment}
+              onAdd={onAdd}
+              contador={contador}
+            />
+          }
         </Row>
       )}
     </div>
