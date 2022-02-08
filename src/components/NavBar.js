@@ -1,9 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import CartWidget from "./CartWidget";
 
 function NavBar() {
+  let navigate = useNavigate();
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -18,11 +19,16 @@ function NavBar() {
           >
             <Nav>
               <NavDropdown title="Categorias" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="/category/Tecnologia">
+                <NavDropdown.Item
+                  onClick={() => navigate("/category/Tecnologia")}
+                >
                   Tecnologia
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/category/Ropa">Ropa</NavDropdown.Item>
-                <NavDropdown.Item href="/category/Hogar">
+
+                <NavDropdown.Item onClick={() => navigate("/category/Ropa")}>
+                  Ropa
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => navigate("/category/Hogar")}>
                   Hogar
                 </NavDropdown.Item>
               </NavDropdown>

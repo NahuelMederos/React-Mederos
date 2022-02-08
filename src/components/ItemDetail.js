@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ItemCount from "./ItemCount";
 import { Row, Col } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
+import { CartContext } from "../context/cartContext";
 
 function ItemDetail() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function ItemDetail() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [contador, setContador] = useState(1);
-  const [itemsComprados, setItemsComprados] = useState();
+  const { addItem } = useContext(CartContext);
 
   useEffect(() => {
     const URL = `http://localhost:3001/productos/${id}`;
@@ -37,7 +38,7 @@ function ItemDetail() {
   };
 
   const onAdd = () => {
-    setItemsComprados(contador);
+    addItem(item.id, item.title, contador, item.price);
     navigate("/cart");
   };
 

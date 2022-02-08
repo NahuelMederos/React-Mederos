@@ -32,9 +32,8 @@ function ItemList(props) {
           <Container>
             <Row xs={2} md={4} lg={6}>
               {items.map((item) => (
-                <Col>
+                <Col key={item.id}>
                   <Item
-                    key={item.id}
                     id={item.id}
                     title={item.title}
                     price={item.price}
@@ -59,18 +58,24 @@ function ItemList(props) {
         ) : error ? (
           "Hubo un error " + error
         ) : (
-          items.map((item) =>
-            props.categoria === item.categoria ? (
-              <Item
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                price={item.price}
-                pictureUrl={item.pictureUrl}
-                stock={item.stock}
-              />
-            ) : null
-          )
+          <Container>
+            <Row xs={2} md={4} lg={6} className="justify-content-center">
+              {items.map(
+                (item) =>
+                  props.categoria === item.categoria && (
+                    <Col key={item.id}>
+                      <Item
+                        id={item.id}
+                        title={item.title}
+                        price={item.price}
+                        pictureUrl={item.pictureUrl}
+                        stock={item.stock}
+                      />
+                    </Col>
+                  )
+              )}
+            </Row>
+          </Container>
         )}
       </div>
     );
