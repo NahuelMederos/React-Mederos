@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const addItem = (id, name, quantity, price) => {
+  const addItem = (id, name, quantity, price, image) => {
     price = quantity * price;
     if (isInCart(id)) {
       setCart(
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
         })
       );
     } else {
-      const newItem = { id, name, quantity, price };
+      const newItem = { id, name, quantity, price, image };
       setCart((prevState) => [...prevState, newItem]);
     }
   };
@@ -41,8 +41,33 @@ export const CartProvider = ({ children }) => {
     setCart([]);
   };
 
+  const calcularPrecioTotal = () => {
+    let precioTotal = 0;
+    cart.forEach((item) => {
+      precioTotal = precioTotal + item.price;
+    });
+    return precioTotal;
+  };
+
+  const calcularCantidadItems = () => {
+    let cantidadItems = 0;
+    cart.forEach((item) => {
+      cantidadItems = cantidadItems + item.quantity;
+    });
+    return cantidadItems;
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem, clearCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addItem,
+        removeItem,
+        clearCart,
+        calcularPrecioTotal,
+        calcularCantidadItems,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -38,7 +38,7 @@ function ItemDetail() {
   };
 
   const onAdd = () => {
-    addItem(item.id, item.title, contador, item.price);
+    addItem(item.id, item.title, contador, item.price, item.pictureUrl);
     navigate("/cart");
   };
 
