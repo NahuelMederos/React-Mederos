@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Item from "./Item";
 import { Col, Row, Container } from "react-bootstrap";
+import { getFirestore } from "../firebase";
 
 function ItemList(props) {
   const [items, setItems] = useState([]);
@@ -8,78 +9,62 @@ function ItemList(props) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const URL = "http://localhost:3001/productos";
+    const db = getFirestore();
+    var productsCollection;
 
-    setIsLoading(true);
-    fetch(URL)
-      .then((response) => response.json())
-      .then((json) => setItems(json))
-      .catch((err) => setError(err))
-      .finally(() => setIsLoading(false));
+    if (props.categoria) {
+      productsCollection = db
+        .collection("productos")
+        .where("categoria", "==", props.categoria);
+    } else {
+      productsCollection = db.collection("productos");
+    }
+
+    const getDataFromFirestore = async () => {
+      setIsLoading(true);
+      try {
+        const response = await productsCollection.get();
+        if (response.empty) {
+          console.log("No hay productos");
+        }
+        setItems(response.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getDataFromFirestore();
   }, [props.categoria]);
 
-  if (!props.categoria) {
-    return (
-      <div className="d-flex justify-content-center ">
-        {isLoading ? (
-          <div
-            className="spinner-grow position-absolute top-50 start-50 "
-            role="status"
-          ></div>
-        ) : error ? (
-          "Hubo un error " + error
-        ) : (
-          <Container>
-            <Row xs={2} md={4} lg={6}>
-              {items.map((item) => (
-                <Col key={item.id}>
-                  <Item
-                    id={item.id}
-                    title={item.title}
-                    price={item.price}
-                    pictureUrl={item.pictureUrl}
-                    stock={item.stock}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </Container>
-        )}
-      </div>
-    );
-  } else {
-    return (
-      <div className="d-flex justify-content-center">
-        {isLoading ? (
-          <div
-            className="spinner-grow position-absolute top-50 start-50 "
-            role="status"
-          ></div>
-        ) : error ? (
-          "Hubo un error " + error
-        ) : (
-          <Container>
-            <Row xs={2} md={4} lg={6} className="justify-content-center">
-              {items.map(
-                (item) =>
-                  props.categoria === item.categoria && (
-                    <Col key={item.id}>
-                      <Item
-                        id={item.id}
-                        title={item.title}
-                        price={item.price}
-                        pictureUrl={item.pictureUrl}
-                        stock={item.stock}
-                      />
-                    </Col>
-                  )
-              )}
-            </Row>
-          </Container>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div className="d-flex justify-content-center ">
+      {isLoading ? (
+        <div
+          className="spinner-grow position-absolute top-50 start-50 "
+          role="status"
+        ></div>
+      ) : error ? (
+        "Hubo un error " + error
+      ) : (
+        <Container>
+          <Row xs={2} md={4} lg={6}>
+            {items.map((item) => (
+              <Col key={item.id}>
+                <Item
+                  id={item.id}
+                  title={item.title}
+                  price={item.price}
+                  pictureUrl={item.pictureUrl}
+                  stock={item.stock}
+                />
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      )}
+    </div>
+  );
 }
 
 export default ItemList;

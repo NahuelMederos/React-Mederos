@@ -3,26 +3,39 @@ import ItemCount from "./ItemCount";
 import { Row, Col } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
+import { getFirestore } from "../firebase";
 
 function ItemDetail() {
   const { id } = useParams();
   let navigate = useNavigate();
 
-  const [item, setItems] = useState([]);
+  const [item, setItem] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [contador, setContador] = useState(1);
   const { addItem } = useContext(CartContext);
 
   useEffect(() => {
-    const URL = `http://localhost:3001/productos/${id}`;
+    const db = getFirestore();
+    const productsCollection = db.collection("productos");
+    const selectedItem = productsCollection.doc(id);
 
-    setIsLoading(true);
-    fetch(URL)
-      .then((response) => response.json())
-      .then((json) => setItems(json))
-      .catch((err) => setError(err))
-      .finally(() => setIsLoading(false));
+    const getDataFromFirestore = async () => {
+      setIsLoading(true);
+      try {
+        const response = await selectedItem.get();
+        if (response.empty) {
+          console.log("El producto no existe");
+        }
+        setItem({ ...response.data(), id: response.id });
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getDataFromFirestore();
   }, [id]);
 
   const decrement = () => {
