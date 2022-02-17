@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { CartContext } from "../context/cartContext";
 import { useNavigate } from "react-router-dom";
+import { getFirestore } from "../firebase";
 
 function Cart() {
   const { cart, removeItem, clearCart, calcularPrecioTotal } =
@@ -9,6 +10,42 @@ function Cart() {
   useEffect(() => {}, [cart]);
 
   let navigate = useNavigate();
+
+  const finalizarCompra = (e) => {
+    e.preventDefault();
+    const itemsComprados = cart.map((item) => {
+      return {
+        title: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      };
+    });
+    const date = new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace(/-/g, "/")
+      .replace("T", " ");
+    const total = calcularPrecioTotal();
+
+    const ORDEN = {
+      comprador: {
+        nombre: e.target.nombre.value,
+        telefono: e.target.telefono.value,
+        email: e.target.email.value,
+      },
+      itemsComprados,
+      fecha: date,
+      total: total,
+    };
+    const db = getFirestore();
+    db.collection("orders")
+      .add(ORDEN)
+      .then((res) => {
+        navigate(`/comprarealizada/${res.id}`);
+      })
+      .catch((err) => console.log("Hubo un error", err))
+      .finally(() => clearCart());
+  };
 
   if (cart.length === 0) {
     return (
@@ -92,10 +129,52 @@ function Cart() {
               </div>
             </div>
             <div className="row mt-4 d-flex align-items-center">
-              <div className="col-sm-6 order-md-2 text-end">
-                <a href="/" className="btn btn-success mb-4 btn-lg pl-5 pr-5">
-                  Terminar compra
-                </a>
+              <div>
+                <form onSubmit={finalizarCompra}>
+                  <div className="form-row">
+                    <div className="form-group col-md-6">
+                      <label htmlFor="inputNombre">Nombre</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="nombre"
+                        id="inputNombre"
+                        placeholder="Nombre"
+                        required
+                      />
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label htmlFor="inputTelefono">Telefono</label>
+                      <input
+                        type="text"
+                        name="telefono"
+                        className="form-control"
+                        id="inputTelefono"
+                        placeholder="Telefono"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="inputEmail">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      name="email"
+                      id="inputEmail"
+                      placeholder="a@email.com"
+                      required
+                    />
+                  </div>
+                  <div className="col-sm-6 order-md-2 text-end">
+                    <button
+                      type="submit"
+                      className="btn btn-success mb-4 btn-lg pl-5 pr-5"
+                    >
+                      Terminar compra
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -106,5 +185,3 @@ function Cart() {
 }
 
 export default Cart;
-
-// <button onClick={() => clearCart()}>Limpiar carrito</button>

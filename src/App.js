@@ -3,8 +3,8 @@ import ItemListContainer from "./components/ItemListContainer";
 import ItemDetail from "./components/ItemDetail";
 import Cart from "./components/Cart";
 import { CartProvider } from "./context/cartContext";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CompraFinalizada from "./components/CompraFinalizada";
 
 function App() {
   return (
@@ -22,6 +22,11 @@ function App() {
             <Route path=":id" element={<ItemDetail />} />
           </Route>
           <Route index path="cart" element={<Cart />}></Route>
+          <Route
+            index
+            path="comprarealizada/:orderId"
+            element={<CompraFinalizada />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </CartProvider>
