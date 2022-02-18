@@ -34,6 +34,7 @@ function Cart() {
     const ORDEN = {
       comprador: {
         nombre: e.target.nombre.value,
+        apellido: e.target.apellido.value,
         telefono: e.target.telefono.value,
         email: e.target.email.value,
       },
@@ -143,33 +144,38 @@ function Cart() {
               </div>
             </div>
             <div className="row mt-4 d-flex align-items-center">
-              <div>
-                <form onSubmit={finalizarCompra}>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <label htmlFor="inputNombre">Nombre</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="nombre"
-                        id="inputNombre"
-                        placeholder="Nombre"
-                        required
-                      />
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label htmlFor="inputTelefono">Telefono</label>
-                      <input
-                        type="text"
-                        name="telefono"
-                        className="form-control"
-                        id="inputTelefono"
-                        placeholder="Telefono"
-                        required
-                      />
-                    </div>
+              <form onSubmit={finalizarCompra}>
+                <div className="row">
+                  <label htmlFor="inputNombre">Nombre y apellido</label>
+                  <div className="form-group input-group mb-2 col-md-6">
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="nombre"
+                      id="inputNombre"
+                      placeholder="Nombre"
+                      required
+                    />
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="apellido"
+                      placeholder="Apellido"
+                      required
+                    />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mb-2 col-md-6">
+                    <label htmlFor="inputTelefono">Telefono</label>
+                    <input
+                      type="text"
+                      name="telefono"
+                      className="form-control"
+                      id="inputTelefono"
+                      placeholder="Telefono"
+                      required
+                    />
+                  </div>
+                  <div className="form-group col-md-6">
                     <label htmlFor="inputEmail">Email</label>
                     <input
                       type="email"
@@ -180,16 +186,17 @@ function Cart() {
                       required
                     />
                   </div>
-                  <div className="col-sm-6 order-md-2 text-end">
-                    <button
-                      type="submit"
-                      className="btn btn-success mb-4 btn-lg pl-5 pr-5"
-                    >
-                      Terminar compra
-                    </button>
-                  </div>
-                </form>
-              </div>
+                </div>
+
+                <div className=" mt-3 order-md-2 text-center">
+                  <button
+                    type="submit"
+                    className="btn btn-success mb-4 btn-lg pl-5 pr-5"
+                  >
+                    Terminar compra
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </section>

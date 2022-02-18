@@ -10,10 +10,10 @@ function ItemDetail() {
   let navigate = useNavigate();
 
   const [item, setItem] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [contador, setContador] = useState(1);
-  const { addItem } = useContext(CartContext);
+  const { addItem, cantidadEnCarro } = useContext(CartContext);
 
   useEffect(() => {
     const db = getFirestore();
@@ -34,7 +34,6 @@ function ItemDetail() {
         setIsLoading(false);
       }
     };
-
     getDataFromFirestore();
   }, [id]);
 
@@ -45,7 +44,7 @@ function ItemDetail() {
   };
 
   const increment = () => {
-    contador >= item.stock
+    contador >= item.stock - cantidadEnCarro(item.id)
       ? setContador((prevState) => prevState)
       : setContador((prevState) => prevState + 1);
   };
@@ -66,6 +65,7 @@ function ItemDetail() {
         "Hubo un error " + error
       ) : (
         <Row>
+          {}
           <Col>
             <img
               className="item-img-detail"
@@ -80,8 +80,7 @@ function ItemDetail() {
           </Col>
           {
             <ItemCount
-              nombre={item.title}
-              stock={item.stock}
+              stock={item.stock - cantidadEnCarro(item.id)}
               decrement={decrement}
               increment={increment}
               onAdd={onAdd}

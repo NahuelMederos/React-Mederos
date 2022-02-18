@@ -41,7 +41,10 @@ function CompraFinalizada() {
         <h1>Esta orden no existe</h1>
       ) : (
         <div>
-          <h1>Gracias por tu compra {order.comprador.nombre}!</h1>
+          <h1>
+            Gracias por tu compra {order.comprador.nombre}{" "}
+            {order.comprador.apellido}!
+          </h1>
           <br />
           <h2>Id de la compra:{order.id}</h2>
           <h2>Fecha: {order.fecha}</h2>

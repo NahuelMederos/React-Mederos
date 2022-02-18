@@ -1,19 +1,7 @@
 import React from "react";
 import { InputGroup, Button } from "react-bootstrap";
 
-function ItemCount({
-  stock,
-  initial,
-  nombre,
-  decrement,
-  increment,
-  contador,
-  onAdd,
-}) {
-  if (initial > stock) {
-    initial = stock;
-  }
-
+function ItemCount({ stock, decrement, increment, contador, onAdd }) {
   return (
     <div className="text-center">
       <InputGroup className="justify-content-center">
