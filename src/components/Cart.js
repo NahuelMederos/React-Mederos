@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { CartContext } from "../context/cartContext";
 import { useNavigate } from "react-router-dom";
 import { getFirestore } from "../firebase";
+import firebase from "firebase";
 
 function Cart() {
   const { cart, removeItem, clearCart, calcularPrecioTotal } =
@@ -15,16 +16,19 @@ function Cart() {
     e.preventDefault();
     const itemsComprados = cart.map((item) => {
       return {
+        id: item.id,
         title: item.name,
         quantity: item.quantity,
         price: item.price,
       };
     });
+
     const date = new Date()
       .toISOString()
       .slice(0, 19)
       .replace(/-/g, "/")
       .replace("T", " ");
+
     const total = calcularPrecioTotal();
 
     const ORDEN = {
@@ -37,11 +41,21 @@ function Cart() {
       fecha: date,
       total: total,
     };
+
     const db = getFirestore();
-    db.collection("orders")
-      .add(ORDEN)
+    var batch = db.batch();
+    const orderRef = db.collection("orders").doc();
+    batch.set(orderRef, ORDEN);
+    itemsComprados.forEach((item) => {
+      batch.update(db.collection("productos").doc(item.id), {
+        stock: firebase.firestore.FieldValue.increment(-item.quantity),
+      });
+    });
+
+    batch
+      .commit()
       .then((res) => {
-        navigate(`/comprarealizada/${res.id}`);
+        navigate(`/comprarealizada/${orderRef.id}`);
       })
       .catch((err) => console.log("Hubo un error", err))
       .finally(() => clearCart());

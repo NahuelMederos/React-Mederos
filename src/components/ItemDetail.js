@@ -24,7 +24,7 @@ function ItemDetail() {
       setIsLoading(true);
       try {
         const response = await selectedItem.get();
-        if (response.empty) {
+        if (!response.exists) {
           console.log("El producto no existe");
         }
         setItem({ ...response.data(), id: response.id });
