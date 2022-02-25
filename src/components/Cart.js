@@ -1,10 +1,12 @@
 import { useContext, useEffect } from "react";
 import { CartContext } from "../context/cartContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getFirestore } from "../firebase";
-import firebase from "firebase";
+import { useAuth } from "../context/authContext";
+import firebase from "firebase/app";
 
 function Cart() {
+  const { currentUser } = useAuth();
   const { cart, removeItem, clearCart, calcularPrecioTotal } =
     useContext(CartContext);
 
@@ -36,7 +38,7 @@ function Cart() {
         nombre: e.target.nombre.value,
         apellido: e.target.apellido.value,
         telefono: e.target.telefono.value,
-        email: e.target.email.value,
+        email: currentUser.email,
       },
       itemsComprados,
       fecha: date,
@@ -145,51 +147,52 @@ function Cart() {
             </div>
             <div className="row mt-4 d-flex align-items-center">
               <form onSubmit={finalizarCompra}>
-                <div className="row">
-                  <label htmlFor="inputNombre">Nombre y apellido</label>
-                  <div className="form-group input-group mb-2 col-md-6">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="nombre"
-                      id="inputNombre"
-                      placeholder="Nombre"
-                      required
-                    />
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="apellido"
-                      placeholder="Apellido"
-                      required
-                    />
+                {currentUser && (
+                  <div className="row">
+                    <label htmlFor="inputNombre">Nombre y apellido</label>
+                    <div className="form-group input-group mb-2 col-md-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="nombre"
+                        id="inputNombre"
+                        placeholder="Nombre"
+                        required
+                      />
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="apellido"
+                        placeholder="Apellido"
+                        required
+                      />
+                    </div>
+                    <div className="form-group mb-2 col-md-6">
+                      <label htmlFor="inputTelefono">Telefono</label>
+                      <input
+                        type="text"
+                        name="telefono"
+                        className="form-control"
+                        id="inputTelefono"
+                        placeholder="Telefono"
+                        required
+                      />
+                    </div>
                   </div>
-                  <div className="form-group mb-2 col-md-6">
-                    <label htmlFor="inputTelefono">Telefono</label>
-                    <input
-                      type="text"
-                      name="telefono"
-                      className="form-control"
-                      id="inputTelefono"
-                      placeholder="Telefono"
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label htmlFor="inputEmail">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      id="inputEmail"
-                      placeholder="a@email.com"
-                      required
-                    />
-                  </div>
-                </div>
+                )}
 
                 <div className=" mt-3 order-md-2 text-center">
+                  {!currentUser && (
+                    <div className="alert alert-danger" role="alert">
+                      Primero debes{" "}
+                      <Link className="alert-link" to="/signin">
+                        Iniciar sesion
+                      </Link>{" "}
+                      para poder realizar la compra
+                    </div>
+                  )}
                   <button
+                    disabled={!currentUser}
                     type="submit"
                     className="btn btn-success mb-4 btn-lg pl-5 pr-5"
                   >

@@ -2,9 +2,21 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import CartWidget from "./CartWidget";
+import { useAuth } from "../context/authContext";
 
 function NavBar() {
   let navigate = useNavigate();
+  const { logout, currentUser } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/signin");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -33,6 +45,21 @@ function NavBar() {
                 </NavDropdown.Item>
               </NavDropdown>
               <Nav.Link href="#">Contacto</Nav.Link>
+              {!currentUser ? (
+                <>
+                  <Nav.Link onClick={() => navigate("/signin")}>
+                    Iniciar sesion
+                  </Nav.Link>
+                  <Nav.Link onClick={() => navigate("/signup")}>
+                    Registrarse
+                  </Nav.Link>
+                </>
+              ) : (
+                <>
+                  <Navbar.Text>Bienvenido {currentUser.email}</Navbar.Text>
+                  <Nav.Link onClick={handleLogout}>Cerrar sesion</Nav.Link>
+                </>
+              )}
               <CartWidget />
             </Nav>
           </Navbar.Collapse>

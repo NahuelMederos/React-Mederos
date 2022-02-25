@@ -24,10 +24,9 @@ function ItemDetail() {
       setIsLoading(true);
       try {
         const response = await selectedItem.get();
-        if (!response.exists) {
-          console.log("El producto no existe");
+        if (response.exists) {
+          setItem({ ...response.data(), id: response.id });
         }
-        setItem({ ...response.data(), id: response.id });
       } catch (error) {
         setError(error);
       } finally {
@@ -63,9 +62,21 @@ function ItemDetail() {
         ></div>
       ) : error ? (
         "Hubo un error " + error
+      ) : item.length === 0 ? (
+        <div className="d-flex flex-column align-items-center mt-5">
+          <h1>Lo sentimos.</h1>
+          <p className="lead">No pudimos encontrar esta pagina.</p>
+          <p className="lead">
+            <button
+              onClick={() => navigate("/")}
+              className="btn btn-lg btn-secondary fw-bold border-white bg-black"
+            >
+              Volver al inicio
+            </button>
+          </p>
+        </div>
       ) : (
         <Row>
-          {}
           <Col>
             <img
               className="item-img-detail"
