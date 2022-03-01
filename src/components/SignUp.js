@@ -1,15 +1,21 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { useAuth } from "../context/authContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 function SignUp() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup, currentUser } = useAuth();
+  const nombreRef = useRef();
+  const apellidoRef = useRef();
+  const [phoneNumber, setPhoneNumber] = useState();
+  const { signup } = useAuth();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,11 +27,18 @@ function SignUp() {
     try {
       setError("");
       setIsLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
+      await signup(
+        emailRef.current.value,
+        passwordRef.current.value,
+        nombreRef.current.value,
+        apellidoRef.current.value,
+        phoneNumber
+      );
     } catch (error) {
       setError("" + error.message);
     } finally {
       setIsLoading(false);
+      navigate("/");
     }
   };
 
@@ -39,7 +52,6 @@ function SignUp() {
           <Card>
             <Card.Body>
               <h2 className="text-center mb-4">Registro</h2>
-              {currentUser && currentUser.email}
               {error && <Alert variant="danger">{error}</Alert>}
               <Form
                 onSubmit={handleSubmit}
@@ -75,6 +87,38 @@ function SignUp() {
                     required
                     autoComplete="off"
                   ></Form.Control>
+                </Form.Group>
+                <Form.Group id="nombre">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control
+                    className="mb-3"
+                    type="text"
+                    ref={nombreRef}
+                    required
+                    autoComplete="off"
+                  ></Form.Control>
+                </Form.Group>
+                <Form.Group id="apellido">
+                  <Form.Label>Apellido</Form.Label>
+                  <Form.Control
+                    className="mb-3"
+                    type="text"
+                    ref={apellidoRef}
+                    required
+                    autoComplete="off"
+                  ></Form.Control>
+                </Form.Group>
+                <Form.Group id="phone">
+                  <Form.Label>Telefono</Form.Label>
+                  <PhoneInput
+                    country={"uy"}
+                    value={phoneNumber}
+                    inputProps={{
+                      required: true,
+                      minLength: "7",
+                    }}
+                    onChange={(phone) => setPhoneNumber(phone)}
+                  />
                 </Form.Group>
                 <Button
                   disabled={isLoading}
