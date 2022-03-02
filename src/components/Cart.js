@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../context/cartContext";
 import { useNavigate, Link } from "react-router-dom";
 import { getFirestore } from "../firebase";
@@ -6,27 +6,12 @@ import { useAuth } from "../context/authContext";
 import firebase from "firebase/app";
 
 function Cart() {
-  const { currentUser } = useAuth();
-  const [userData, setUserData] = useState([]);
+  const { currentUser, userData } = useAuth();
 
   const { cart, removeItem, clearCart, calcularPrecioTotal } =
     useContext(CartContext);
 
-  useEffect(() => {
-    if (currentUser) {
-      const db = getFirestore();
-      const usersCollection = db.collection("users");
-      const selectedUser = usersCollection.doc(currentUser.uid);
-
-      const getUserFromFirestore = async () => {
-        const response = await selectedUser.get();
-        if (response.exists) {
-          setUserData(response.data());
-        }
-      };
-      getUserFromFirestore();
-    }
-  }, [cart, currentUser]);
+  useEffect(() => {}, [cart]);
 
   let navigate = useNavigate();
 

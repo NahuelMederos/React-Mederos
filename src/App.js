@@ -8,6 +8,7 @@ import CompraFinalizada from "./components/CompraFinalizada";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import { AuthProvider } from "./context/authContext";
+import Whishlist from "./components/Whishlist";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               path="comprarealizada/:orderId"
               element={<CompraFinalizada />}
             ></Route>
+            <Route path="wishlist" element={<Whishlist />}></Route>
           </Routes>
         </BrowserRouter>
       </CartProvider>

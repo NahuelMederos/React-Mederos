@@ -18,11 +18,10 @@ function SignIn() {
     try {
       setError("");
       await signin(emailRef.current.value, passwordRef.current.value);
+      navigate("/");
     } catch (error) {
       setError("" + error.message);
-    } finally {
       setIsLoading(false);
-      navigate("/");
     }
   };
 

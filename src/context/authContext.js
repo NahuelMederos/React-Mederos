@@ -11,6 +11,7 @@ export function useAuth() {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState([]);
 
   const signup = (email, password, nombre, apellido, telefono) => {
     return auth
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
+    userData,
     signup,
     signin,
     logout,
@@ -50,8 +52,24 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
     });
 
+    if (currentUser) {
+      const db = getFirestore();
+      const usersCollection = db.collection("users");
+      const selectedUser = usersCollection.doc(currentUser.uid);
+
+      const getUserFromFirestore = async () => {
+        const response = await selectedUser.get();
+        if (response.exists) {
+          setUserData(response.data());
+        }
+      };
+      getUserFromFirestore();
+    } else {
+      setUserData([]);
+    }
+
     return () => unsuscribe;
-  }, []);
+  }, [currentUser]);
 
   return (
     <>

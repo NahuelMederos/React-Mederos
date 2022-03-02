@@ -34,11 +34,10 @@ function SignUp() {
         apellidoRef.current.value,
         phoneNumber
       );
+      navigate("/");
     } catch (error) {
       setError("" + error.message);
-    } finally {
       setIsLoading(false);
-      navigate("/");
     }
   };
 

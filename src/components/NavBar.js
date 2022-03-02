@@ -58,6 +58,9 @@ function NavBar() {
                 <>
                   <Navbar.Text>Bienvenido {currentUser.email}</Navbar.Text>
                   <Nav.Link onClick={handleLogout}>Cerrar sesion</Nav.Link>
+                  <Nav.Link onClick={() => navigate("/wishlist")}>
+                    Whishlist
+                  </Nav.Link>
                 </>
               )}
               <CartWidget />

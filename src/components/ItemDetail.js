@@ -1,19 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
 import ItemCount from "./ItemCount";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
 import { getFirestore } from "../firebase";
+import { useAuth } from "../context/authContext";
+import firebase from "firebase/app";
 
 function ItemDetail() {
   const { id } = useParams();
   let navigate = useNavigate();
 
+  const { userData, currentUser } = useAuth();
   const [item, setItem] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [contador, setContador] = useState(1);
   const { addItem, cantidadEnCarro } = useContext(CartContext);
+  const [onWishList, setOnWishList] = useState(true);
 
   useEffect(() => {
     const db = getFirestore();
@@ -33,8 +37,13 @@ function ItemDetail() {
         setIsLoading(false);
       }
     };
+
+    if (userData.wishlist) {
+      setOnWishList(userData.wishlist.some((x) => id === x));
+    }
+
     getDataFromFirestore();
-  }, [id]);
+  }, [id, userData]);
 
   const decrement = () => {
     contador <= 1
@@ -51,6 +60,24 @@ function ItemDetail() {
   const onAdd = () => {
     addItem(item.id, item.title, contador, item.price, item.pictureUrl);
     navigate("/cart");
+  };
+
+  const addToWishlist = async () => {
+    setOnWishList(true);
+    try {
+      const db = getFirestore();
+      await db
+        .collection("users")
+        .doc(currentUser.uid)
+        .update({
+          wishlist: firebase.firestore.FieldValue.arrayUnion(item.id),
+        });
+      userData.wishlist.push(item.id);
+      setOnWishList(true);
+    } catch (error) {
+      console.log(error);
+      setOnWishList(false);
+    }
   };
 
   return (
@@ -77,6 +104,7 @@ function ItemDetail() {
         </div>
       ) : (
         <Row>
+          {console.log(userData)}
           <Col>
             <img
               className="item-img-detail"
@@ -88,6 +116,15 @@ function ItemDetail() {
             <h1>{item.title}</h1>
             <p>Precio : {item.price}</p>
             <p>Detalles: {item.details}</p>
+            {currentUser && (
+              <Button
+                disabled={onWishList}
+                className="btn btn-primary"
+                onClick={addToWishlist}
+              >
+                Agregar a la lista de deseados
+              </Button>
+            )}
           </Col>
           {
             <ItemCount
