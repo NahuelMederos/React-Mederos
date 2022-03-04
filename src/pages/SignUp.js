@@ -1,8 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { useAuth } from "../context/authContext";
 import { Link, useNavigate } from "react-router-dom";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 function SignUp() {
@@ -11,10 +10,11 @@ function SignUp() {
   const passwordConfirmRef = useRef();
   const nombreRef = useRef();
   const apellidoRef = useRef();
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [phone, setPhone] = useState("");
   const { signup } = useAuth();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPasword, setShowPassword] = useState(true);
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,6 +22,8 @@ function SignUp() {
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Las contraseñas no coinciden");
+    } else if (/^\d+$/.test(phone) === false) {
+      return setError("El telefono debe estar compuesto solo por numeros");
     }
 
     try {
@@ -32,7 +34,7 @@ function SignUp() {
         passwordRef.current.value,
         nombreRef.current.value,
         apellidoRef.current.value,
-        phoneNumber
+        phone
       );
       navigate("/");
     } catch (error) {
@@ -71,7 +73,7 @@ function SignUp() {
                   <Form.Label>Contraseña</Form.Label>
                   <Form.Control
                     className="mb-3"
-                    type="password"
+                    type={showPasword ? "password" : "text"}
                     ref={passwordRef}
                     required
                     autoComplete="off"
@@ -81,11 +83,22 @@ function SignUp() {
                   <Form.Label>Confirmar contraseña</Form.Label>
                   <Form.Control
                     className="mb-3"
-                    type="password"
+                    type={showPasword ? "password" : "text"}
                     ref={passwordConfirmRef}
                     required
                     autoComplete="off"
                   ></Form.Control>
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  id="passswordCheck"
+                  controlId="formBasicCheckbox"
+                >
+                  <Form.Check
+                    onClick={() => setShowPassword(!showPasword)}
+                    type="checkbox"
+                    label="Mostrar contraseña"
+                  />
                 </Form.Group>
                 <Form.Group id="nombre">
                   <Form.Label>Nombre</Form.Label>
@@ -109,15 +122,15 @@ function SignUp() {
                 </Form.Group>
                 <Form.Group id="phone">
                   <Form.Label>Telefono</Form.Label>
-                  <PhoneInput
-                    country={"uy"}
-                    value={phoneNumber}
-                    inputProps={{
-                      required: true,
-                      minLength: "7",
-                    }}
-                    onChange={(phone) => setPhoneNumber(phone)}
-                  />
+                  <Form.Control
+                    className="mb-3"
+                    type="text"
+                    onChange={(e) => setPhone(e.target.value)}
+                    value={phone}
+                    minLength={7}
+                    maxLength={15}
+                    required
+                  ></Form.Control>
                 </Form.Group>
                 <Button
                   disabled={isLoading}

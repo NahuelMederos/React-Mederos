@@ -39,7 +39,7 @@ function ItemDetail() {
     };
 
     if (userData.wishlist) {
-      setOnWishList(userData.wishlist.some((x) => id === x));
+      setOnWishList(userData.wishlist.some((x) => id === x.id));
     }
 
     getDataFromFirestore();
@@ -70,9 +70,17 @@ function ItemDetail() {
         .collection("users")
         .doc(currentUser.uid)
         .update({
-          wishlist: firebase.firestore.FieldValue.arrayUnion(item.id),
+          wishlist: firebase.firestore.FieldValue.arrayUnion({
+            id: item.id,
+            title: item.title,
+            pictureUrl: item.pictureUrl,
+          }),
         });
-      userData.wishlist.push(item.id);
+      userData.wishlist.push({
+        id: item.id,
+        title: item.title,
+        pictureUrl: item.pictureUrl,
+      });
       setOnWishList(true);
     } catch (error) {
       console.log(error);
@@ -92,7 +100,7 @@ function ItemDetail() {
       ) : item.length === 0 ? (
         <div className="d-flex flex-column align-items-center mt-5">
           <h1>Lo sentimos.</h1>
-          <p className="lead">No pudimos encontrar esta pagina.</p>
+          <p className="lead">No pudimos encontrar este articulo.</p>
           <p className="lead">
             <button
               onClick={() => navigate("/")}
@@ -104,7 +112,6 @@ function ItemDetail() {
         </div>
       ) : (
         <Row>
-          {console.log(userData)}
           <Col>
             <img
               className="item-img-detail"

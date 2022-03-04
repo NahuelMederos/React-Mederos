@@ -9,6 +9,7 @@ function SignIn() {
   const { signin } = useAuth();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPasword, setShowPassword] = useState(true);
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -56,11 +57,22 @@ function SignIn() {
                   <Form.Label>Contraseña</Form.Label>
                   <Form.Control
                     className="mb-3"
-                    type="password"
+                    type={showPasword ? "password" : "text"}
                     ref={passwordRef}
                     required
                     autoComplete="off"
                   ></Form.Control>
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  id="passswordCheck"
+                  controlId="formBasicCheckbox"
+                >
+                  <Form.Check
+                    onClick={() => setShowPassword(!showPasword)}
+                    type="checkbox"
+                    label="Mostrar contraseña"
+                  />
                 </Form.Group>
                 <Button
                   disabled={isLoading}

@@ -8,22 +8,12 @@ function CartWidget() {
 
   let navigate = useNavigate();
 
-  if (calcularCantidadItems() === 0) {
-    return null;
-  } else {
-    return (
-      <div>
-        <Nav.Link onClick={() => navigate("/cart")}>
-          <img
-            src="/images/Carrito.png"
-            alt="carrito png"
-            className="carrito"
-          />{" "}
-          Carrito ({calcularCantidadItems()})
-        </Nav.Link>
-      </div>
-    );
-  }
+  return (
+    <Nav.Link onClick={() => navigate("/cart")}>
+      <img src="/images/Carrito.png" alt="carrito png" className="carrito" />{" "}
+      Carrito ({calcularCantidadItems()})
+    </Nav.Link>
+  );
 }
 
 export default CartWidget;

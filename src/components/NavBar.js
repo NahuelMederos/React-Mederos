@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import CartWidget from "./CartWidget";
+import AccountWidget from "./AccountWidget";
 import { useAuth } from "../context/authContext";
 
 function NavBar() {
@@ -20,56 +21,58 @@ function NavBar() {
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Container>
-          <Link to="/">
-            <Navbar.Brand>Tiendita</Navbar.Brand>
-          </Link>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse
-            className="justify-content-end"
-            id="responsive-navbar-nav"
-          >
-            <Nav>
-              <NavDropdown title="Categorias" id="navbarScrollingDropdown">
-                <NavDropdown.Item
-                  onClick={() => navigate("/category/Tecnologia")}
-                >
-                  Tecnologia
-                </NavDropdown.Item>
+        <Link to="/">
+          <Navbar.Brand className="ms-5">Tiendita</Navbar.Brand>
+        </Link>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse
+          className="justify-content-end"
+          id="responsive-navbar-nav"
+        >
+          <Nav className="me-5">
+            <NavDropdown title="Categorias" id="navbarScrollingDropdown">
+              <NavDropdown.Item
+                onClick={() => navigate("/category/Tecnologia")}
+              >
+                Tecnologia
+              </NavDropdown.Item>
 
-                <NavDropdown.Item onClick={() => navigate("/category/Ropa")}>
-                  Ropa
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => navigate("/category/Hogar")}>
-                  Hogar
-                </NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link href="#">Contacto</Nav.Link>
-              {!currentUser ? (
-                <>
-                  <Nav.Link onClick={() => navigate("/signin")}>
-                    Iniciar sesion
-                  </Nav.Link>
-                  <Nav.Link onClick={() => navigate("/signup")}>
-                    Registrarse
-                  </Nav.Link>
-                </>
-              ) : (
-                <>
-                  <Navbar.Text>Bienvenido {currentUser.email}</Navbar.Text>
-                  <Nav.Link onClick={handleLogout}>Cerrar sesion</Nav.Link>
-                  <Nav.Link onClick={() => navigate("/wishlist")}>
-                    Whishlist
-                  </Nav.Link>
-                </>
-              )}
-              <CartWidget />
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
+              <NavDropdown.Item onClick={() => navigate("/category/Ropa")}>
+                Ropa
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate("/category/Hogar")}>
+                Hogar
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="#">Contacto</Nav.Link>
+
+            {!currentUser ? (
+              <>
+                <Nav.Link onClick={() => navigate("/signin")}>
+                  Iniciar sesion
+                </Nav.Link>
+                <Nav.Link onClick={() => navigate("/signup")}>
+                  Registrarse
+                </Nav.Link>
+              </>
+            ) : (
+              <AccountWidget email={currentUser.email} logout={handleLogout} />
+            )}
+            <CartWidget />
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
     </div>
   );
 }
 
 export default NavBar;
+{
+  /* <>
+                <Navbar.Text>Bienvenido {currentUser.email}</Navbar.Text>
+                <Nav.Link onClick={handleLogout}>Cerrar sesion</Nav.Link>
+                <Nav.Link onClick={() => navigate("/wishlist")}>
+                  Wishlist
+                </Nav.Link>
+              </> */
+}

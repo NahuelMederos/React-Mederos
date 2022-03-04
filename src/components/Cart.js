@@ -24,6 +24,7 @@ function Cart() {
         price: item.price,
       };
     });
+    console.log(userData);
 
     const date = new Date()
       .toISOString()
@@ -82,14 +83,13 @@ function Cart() {
   } else {
     return (
       <>
-        {console.log(userData)}
-        <section className="pt-5 pb-5">
-          <div className="container w-75">
+        <section className="pt-5 pb-5 ">
+          <div className="container cart-container">
             <div className="row">
               <div className="col-lg-12 col-md-12 col-12">
                 <table
                   id="shoppingCart"
-                  className="table table-condensed table-responsive"
+                  className="table table-condensed table-responsive mt-5"
                 >
                   <thead>
                     <tr>
@@ -118,15 +118,20 @@ function Cart() {
                               </div>
                             </div>
                           </td>
-                          <td data-th="Price">${item.price}</td>
-                          <td data-th="Quantity">
+                          <td className="lead pt-5 fs-3" data-th="Price">
+                            ${item.price}
+                          </td>
+                          <td
+                            className="lead pt-5 fs-3 ps-4"
+                            data-th="Quantity"
+                          >
                             <span>{item.quantity}</span>
                           </td>
                           <td className="actions" data-th="">
-                            <div className="text-right">
+                            <div className="text-right pt-5">
                               <button
                                 onClick={() => removeItem(item.id)}
-                                className="btn btn-white border-secondary bg-white btn-md mb-2"
+                                className="btn btn-dark border-secondary "
                               >
                                 Eliminar
                               </button>
@@ -137,7 +142,10 @@ function Cart() {
                     })}
                   </tbody>
                 </table>
-                <button className="btn btn-danger" onClick={() => clearCart()}>
+                <button
+                  className="btn btn-danger btn-lg"
+                  onClick={() => clearCart()}
+                >
                   Limpiar carrito
                 </button>
                 <div className="float-end text-end">
@@ -160,7 +168,10 @@ function Cart() {
                 <button
                   disabled={!currentUser}
                   type="submit"
-                  className="btn btn-success mb-4 btn-lg pl-5 pr-5"
+                  className={
+                    "btn btn-success mb-4 btn-lg pl-5 pr-5 " +
+                    (!currentUser && "invisible")
+                  }
                   onClick={finalizarCompra}
                 >
                   Terminar compra

@@ -38,7 +38,7 @@ function ItemList(props) {
   }, [props.categoria]);
 
   return (
-    <div className="d-flex justify-content-center ">
+    <div className="d-flex justify-content-center  ">
       {isLoading ? (
         <div
           className="spinner-grow position-absolute top-50 start-50 "
@@ -47,16 +47,22 @@ function ItemList(props) {
       ) : error ? (
         "Hubo un error " + error
       ) : (
-        <Container>
-          <Row xs={2} md={4} lg={6}>
+        <Container className="item-list-container">
+          <Row
+            xs={1}
+            sm={2}
+            lg={3}
+            xl={4}
+            xxl={5}
+            className="justify-content-center"
+          >
             {items.map((item) => (
               <Col key={item.id}>
                 <Item
                   id={item.id}
                   title={item.title}
-                  price={item.price}
                   pictureUrl={item.pictureUrl}
-                  stock={item.stock}
+                  price={item.price}
                 />
               </Col>
             ))}
