@@ -17,8 +17,6 @@
    npm start
    ```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ### Dependencias utilizadas
 
 - [React.js](https://reactjs.org/) -
