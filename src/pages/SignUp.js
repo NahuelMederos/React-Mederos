@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { useAuth } from "../context/authContext";
 import { Link, useNavigate } from "react-router-dom";
-import "react-phone-input-2/lib/style.css";
 
 function SignUp() {
   const emailRef = useRef();

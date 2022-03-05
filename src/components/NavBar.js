@@ -44,7 +44,6 @@ function NavBar() {
                 Hogar
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#">Contacto</Nav.Link>
 
             {!currentUser ? (
               <>
