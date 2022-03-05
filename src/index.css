@@ -60,11 +60,31 @@ h3 {
   height: 300px;
 }
 
+@media screen and (max-width: 992px) {
+  .item-img {
+    height: auto;
+    object-fit: scale-down;
+    min-height: 410px;
+  }
+}
+
+.item-card {
+  border: 5px solid transparent;
+  border-radius: 20px;
+}
+
 .item-img-detail {
   width: 400px;
   height: 400px;
-  float: right;
-  margin-right: 100px;
+  background-color: whitesmoke;
+  border: 5px solid transparent;
+  border-radius: 50px;
+}
+
+.item-detail-container {
+  background-color: whitesmoke;
+  border: 5px solid transparent;
+  border-radius: 50px;
 }
 
 a {

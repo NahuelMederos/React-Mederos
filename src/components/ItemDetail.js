@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import ItemCount from "./ItemCount";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Container } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
 import { getFirestore } from "../firebase";
@@ -18,6 +18,7 @@ function ItemDetail() {
   const [contador, setContador] = useState(1);
   const { addItem, cantidadEnCarro } = useContext(CartContext);
   const [onWishList, setOnWishList] = useState(true);
+  const [wishListLoading, setwishListLoading] = useState(false);
 
   useEffect(() => {
     const db = getFirestore();
@@ -63,7 +64,7 @@ function ItemDetail() {
   };
 
   const addToWishlist = async () => {
-    setOnWishList(true);
+    setwishListLoading(true);
     try {
       const db = getFirestore();
       await db
@@ -85,6 +86,32 @@ function ItemDetail() {
     } catch (error) {
       console.log(error);
       setOnWishList(false);
+    } finally {
+      setwishListLoading(false);
+    }
+  };
+
+  const removeFromWishList = async () => {
+    setwishListLoading(true);
+    try {
+      const db = getFirestore();
+      await db
+        .collection("users")
+        .doc(currentUser.uid)
+        .update({
+          wishlist: firebase.firestore.FieldValue.arrayRemove({
+            id: item.id,
+            title: item.title,
+            pictureUrl: item.pictureUrl,
+          }),
+        });
+      userData.wishlist = userData.wishlist.filter((x) => x.id !== item.id);
+      setOnWishList(false);
+    } catch (error) {
+      console.log(error);
+      setOnWishList(true);
+    } finally {
+      setwishListLoading(false);
     }
   };
 
@@ -111,38 +138,49 @@ function ItemDetail() {
           </p>
         </div>
       ) : (
-        <Row>
-          <Col>
-            <img
-              className="item-img-detail"
-              src={"/" + item.pictureUrl}
-              alt={item.title}
-            />
-          </Col>
-          <Col>
-            <h1>{item.title}</h1>
-            <p>Precio : {item.price}</p>
-            <p>Detalles: {item.details}</p>
-            {currentUser && (
-              <Button
-                disabled={onWishList}
-                className="btn btn-primary"
-                onClick={addToWishlist}
-              >
-                Agregar a la lista de deseados
-              </Button>
-            )}
-          </Col>
-          {
-            <ItemCount
-              stock={item.stock - cantidadEnCarro(item.id)}
-              decrement={decrement}
-              increment={increment}
-              onAdd={onAdd}
-              contador={contador}
-            />
-          }
-        </Row>
+        <Container className="mt-5 item-detail-container pt-5 pb-5">
+          <Row>
+            <Col lg={6} xl={5}>
+              <img
+                className="item-img-detail mb-3 ms-5"
+                src={"/" + item.pictureUrl}
+                alt={item.title}
+              />
+            </Col>
+            <Col lg={6} xl={7}>
+              <h1>{item.title}</h1>
+              <h2 className="lead fs-3">Precio : {item.price}</h2>
+              <p className="lead fs-5 text-break">Detalles: {item.details}</p>
+              {currentUser &&
+                (onWishList ? (
+                  <Button
+                    disabled={wishListLoading}
+                    className="btn btn-danger mb-3"
+                    onClick={removeFromWishList}
+                  >
+                    Eliminar de la lista de deseados
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={wishListLoading}
+                    className="btn btn-primary mb-3"
+                    onClick={addToWishlist}
+                  >
+                    Agregar a la lista de deseados
+                  </Button>
+                ))}
+            </Col>
+            {
+              <ItemCount
+                stock={item.stock - cantidadEnCarro(item.id)}
+                decrement={decrement}
+                increment={increment}
+                onAdd={onAdd}
+                contador={contador}
+              />
+            }
+          </Row>
+        </Container>
       )}
     </div>
   );

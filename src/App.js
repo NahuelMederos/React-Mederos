@@ -46,7 +46,11 @@ function App() {
             <Route path="cart" element={<Cart />}></Route>
             <Route
               path="comprarealizada/:orderId"
-              element={<CompraFinalizada />}
+              element={
+                <PrivateRoute loggedOnly={true}>
+                  <CompraFinalizada />
+                </PrivateRoute>
+              }
             ></Route>
             <Route
               path="wishlist"
