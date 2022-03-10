@@ -20,7 +20,13 @@ function NavBar() {
 
   return (
     <div>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar
+        className="navbar"
+        collapseOnSelect
+        expand="lg"
+        bg="dark"
+        variant="dark"
+      >
         <Link to="/">
           <Navbar.Brand className="ms-5">Tiendita</Navbar.Brand>
         </Link>
@@ -66,12 +72,3 @@ function NavBar() {
 }
 
 export default NavBar;
-{
-  /* <>
-                <Navbar.Text>Bienvenido {currentUser.email}</Navbar.Text>
-                <Nav.Link onClick={handleLogout}>Cerrar sesion</Nav.Link>
-                <Nav.Link onClick={() => navigate("/wishlist")}>
-                  Wishlist
-                </Nav.Link>
-              </> */
-}

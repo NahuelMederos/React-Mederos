@@ -26,4 +26,4 @@
 - [Firebase/Firestore](https://firebase.google.com/) - Base de datos y autenticación
 - [dotenv](https://www.npmjs.com/package/dotenv) - Para mantener privados los datos en la api de firebase
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right">(<a href="#top">Ir hacia arriba</a>)</p>

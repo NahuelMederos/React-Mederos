@@ -68,6 +68,23 @@ h3 {
   }
 }
 
+@media screen and (max-width: 500px) {
+  .container {
+    min-width: 500px;
+  }
+
+  .navbar {
+    min-width: 500px;
+  }
+
+  .item-list-container {
+    min-width: 100vw;
+  }
+  .item-card {
+    min-width: 450px;
+  }
+}
+
 .item-card {
   border: 5px solid transparent;
   border-radius: 20px;
