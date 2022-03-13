@@ -24,7 +24,6 @@ function Cart() {
         price: item.price,
       };
     });
-    console.log(userData);
 
     const date = new Date()
       .toISOString()
@@ -99,7 +98,6 @@ function Cart() {
                       <th style={{ widht: "16%" }}></th>
                     </tr>
                   </thead>
-
                   <tbody>
                     {cart.map((item) => {
                       return (

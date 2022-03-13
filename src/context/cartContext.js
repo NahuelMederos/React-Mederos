@@ -24,12 +24,13 @@ export const CartProvider = ({ children }) => {
     if (isInCart(id)) {
       setCart(
         cart.map((item) => {
-          if (item.id === id)
+          if (item.id === id) {
             return {
               ...item,
               quantity: item.quantity + quantity,
               price: item.price + price,
             };
+          }
           return item;
         })
       );
@@ -66,7 +67,7 @@ export const CartProvider = ({ children }) => {
   const cantidadEnCarro = (id) => {
     let cantidadItems = 0;
     if (isInCart(id)) {
-      cantidadItems = cart.find((item) => (item.id = id)).quantity;
+      cantidadItems = cart.find((item) => item.id === id).quantity;
     }
     return cantidadItems;
   };
