@@ -1,4 +1,4 @@
-# Projecto E-Commerce con React y Firebase
+# Proyecto E-Commerce con React y Firebase
 
 ### Instalacion
 
